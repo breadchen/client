@@ -4,7 +4,7 @@
 #define SERV_PORT 2000
 #define SERV_IP "192.168.2.3"
 #define LEAST_ARG_NUM 2
-// only read 50 chars from buffer each time
+// only read the frist 50 chars from buffer each time
 #define MAX_MSG_LEN 50
 // use this to init pid_clients[]
 #define MAX_CLIENT_NUM 256
