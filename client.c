@@ -11,6 +11,7 @@
 #include "errreport.h"
 
 extern int addr_convert(char *addr, struct in_addr *addr_out);
+extern int send_command(FILE* fp, int sockfd);
 
 int main(int argc, char** argv)
 {
@@ -63,9 +64,14 @@ int main(int argc, char** argv)
 		exit(EXIT_FAILURE);
 	} // end of if
 
+	if (FUC_FAILURE == send_command(stdin, n_clientsock))
+	{
+	} // end of if
+
 	close(n_clientsock);
 	return EXIT_SUCCESS;
 } // end of main()
+
 
 /*
  * Function: convert the string of ip address or hostname
@@ -90,3 +96,39 @@ int addr_convert(char *addr, struct in_addr *addr_out)
 
 	return FUC_FAILURE;
 } // end of addr_convert()
+
+
+/*
+ * Function: get user's input and send it to server
+ */
+int send_command(FILE* fp, int sockfd)
+{
+	char sends[MAX_MSG_LEN];
+	char recvs[MAX_MSG_LEN];
+	int n_recived;
+
+	while(1)
+	{
+		if (NULL != fgets(sends, MAX_MSG_LEN, fp))
+		{
+			if ('\n' == sends[strlen(sends) - 1])
+				sends[strlen(sends) - 1] = '\0';
+			else // clear stdin
+				while('\n' != getchar());
+			send(sockfd, sends, strlen(sends) + 1, 0);
+
+			if ('q' == sends[0] || 'Q' == sends[0]) break;
+
+			if (0 == (n_recived = recv(sockfd, recvs, MAX_MSG_LEN, 0)))
+			{
+				PRINT_ERR("error receiving data")
+			} // end of if
+			else
+			{
+				printf("%s\n", recvs);
+			} // end of else
+		} // end of if
+	} // end of while
+
+	return FUC_SUCCESS;
+} // end of send_command()
