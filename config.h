@@ -10,6 +10,6 @@
 #define MAX_CLIENT_NUM 256
 
 #define FUC_SUCCESS 0
-#define FUC_FAILURE 1
+#define FUC_FAILURE -1
 
 #endif // if (!_ADDRESS_H)
