@@ -11,6 +11,7 @@
 #include "config.h"
 #include "errreport.h"
 #include "message.h"
+#include "responsecode.h"
 
 extern int addr_convert(char *addr, struct in_addr *addr_out);
 extern int send_command(FILE* fp, int sockfd);
@@ -20,6 +21,7 @@ int main(int argc, char** argv)
 {
 	int n_clientsock = 0;
 	struct sockaddr_in serv_addr;
+	char recvs[MAX_MSG_LEN];
 
 	// init socket
 	n_clientsock = socket(AF_INET, SOCK_STREAM, 0);
@@ -66,6 +68,16 @@ int main(int argc, char** argv)
 		PRINT_ERR(strerror(errno))
 		exit(EXIT_FAILURE);
 	} // end of if
+
+	if (FUC_FAILURE != get_response(n_clientsock, recvs))
+	{
+		printf("%s\n", str_response[atoi(recvs)]);
+
+		if (SERVER_BUSY == atoi(recvs))
+		{
+			exit(EXIT_FAILURE);
+		} // end of if
+	} // end of else
 
 	if (FUC_FAILURE == send_command(stdin, n_clientsock))
 	{
@@ -139,7 +151,7 @@ int send_command(FILE* fp, int sockfd)
 			} // end of if
 			else
 			{
-				printf("%s\n", recvs);
+				printf("%s\n", str_response[atoi(recvs)]);
 			} // end of else
 		} // end of if
 	} // end of while
