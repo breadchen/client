@@ -69,13 +69,19 @@ int main(int argc, char** argv)
 		exit(EXIT_FAILURE);
 	} // end of if
 
+	// receive welcome message
 	if (FUC_FAILURE != get_response(n_clientsock, recvs))
 	{
-		printf("%s\n", str_response[atoi(recvs)]);
+		printf("server: %s\n", str_response[atoi(recvs)]);
 
 		if (SERVER_BUSY == atoi(recvs))
 		{
 			exit(EXIT_FAILURE);
+		} // end of if
+
+		if (SERVER_QUIT == atoi(recvs))
+		{
+			exit(EXIT_SUCCESS);
 		} // end of if
 	} // end of else
 
@@ -139,7 +145,7 @@ int send_command(FILE* fp, int sockfd)
 											  strlen(sends) + 1))
 			{
 				PRINT_ERR("fail to send command")
-				continue;
+				//continue;
 			} // end of if
 
 			if ('q' == sends[0] || 'Q' == sends[0]) break;
@@ -150,8 +156,13 @@ int send_command(FILE* fp, int sockfd)
 				continue;
 			} // end of if
 			else
-			{
-				printf("%s\n", str_response[atoi(recvs)]);
+			{ // print response
+				printf("server: %s\n", str_response[atoi(recvs)]);
+
+				if (SERVER_QUIT == atoi(recvs))
+				{
+					exit(EXIT_SUCCESS);
+				} // end of if
 			} // end of else
 		} // end of if
 	} // end of while

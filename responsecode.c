@@ -9,5 +9,7 @@ char str_response[CMD_COUNT][RSP_LEN] =
 	// EXEC_SUCCESS
 	"Command executed.",
 	// EXEC_FAILURE
-	"Command execute error."
+	"Command execute error.",
+	// SERVER_QUIT
+	"Server exit."
 };
