@@ -2,6 +2,8 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/time.h>
+#include <sys/select.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <arpa/inet.h>
@@ -83,6 +85,10 @@ int main(int argc, char** argv)
 		{
 			exit(EXIT_SUCCESS);
 		} // end of if
+	} // end of if
+	else
+	{
+		PRINT_ERR("receive welcome message time out")
 	} // end of else
 
 	if (FUC_FAILURE == send_command(stdin, n_clientsock))
@@ -250,9 +256,22 @@ int get_response(int sockfd, char* command_out)
 	int n_counter = 0;
 	char buf[sizeof(struct message)];
 	struct message* msg;
+	fd_set readfd;
+	struct timeval tv;
+
+	// wait few seconds
+	tv.tv_sec = TIME_WAIT;
+	tv.tv_usec = 0;
+
+	FD_ZERO(&readfd);
+	FD_SET(sockfd, &readfd);
 	
 	do
 	{
+		select(sockfd + 1, &readfd, NULL, NULL, &tv);
+		// time out
+		if (!FD_ISSET(sockfd, &readfd)) return FUC_FAILURE;
+		
 		n_counter = recv(sockfd, 
 				         &(buf[n_offset]), 
 						 sizeof(struct message) - n_offset, 

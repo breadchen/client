@@ -8,6 +8,8 @@
 #define MAX_MSG_LEN 50
 // use this to init pid_clients[]
 #define MAX_CLIENT_NUM 256
+// how long will client wait for server response
+#define TIME_WAIT 2
 
 #define FUC_SUCCESS 0
 #define FUC_FAILURE -1

@@ -11,5 +11,6 @@ extern char str_response[CMD_COUNT][RSP_LEN];
 #define EXEC_SUCCESS 2
 #define EXEC_FAILURE 3
 #define SERVER_QUIT 4
+#define CMD_UNRECOGNIZED 5
 
 #endif
