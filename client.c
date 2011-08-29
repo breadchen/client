@@ -154,7 +154,10 @@ int send_command(FILE* fp, int sockfd)
 				//continue;
 			} // end of if
 
-			if ('q' == sends[0] || 'Q' == sends[0]) break;
+			if (4 <= strlen(sends) && 
+				(' ' == sends[4] || '\0' == sends[4]) &&
+				(0 == strncmp(sends, "quit", 4) || 0 == strncmp(sends, "QUIT", 4))
+			   ) break;
 
 			if (FUC_FAILURE == (n_received = get_response(sockfd, recvs)))
 			{

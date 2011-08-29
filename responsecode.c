@@ -13,5 +13,5 @@ char str_response[CMD_COUNT][RSP_LEN] =
 	// SERVER_QUIT
 	"Server exit.",
 	// CMD_UNRECOGNIZED
-	"Command unrecognized."
+	"Unrecognized command."
 };
